@@ -5,7 +5,7 @@ mysql:
   port: 3306
   database: pet-sa
 handlers:
-  port: 8080
+  port: 8082
 
 graphql:
   go get github.com/99designs/gqlgen/codegen/config@v0.17.45
