@@ -1,0 +1,134 @@
+# START CLIENTS
+type Client {
+  cedula: String!
+  nombres: String!
+  apellidos: String!
+  direccion: String!
+  telefono: String!
+  correo: String!
+}
+
+input NewClient {
+  cedula: String!
+  nombres: String!
+  apellidos: String!
+  direccion: String!
+  telefono: String!
+  correo: String!
+}
+# END CLIENTS
+
+# START PETS
+type Pet {
+  nombre: String!
+  raza: String!
+  edad: Int!
+  peso: Float!
+  cedulaCliente: String!
+}
+
+input NewPet {
+  nombre: String!
+  raza: String!
+  edad: Int!
+  peso: Float!
+  cedulaCliente: String!
+}
+
+input UpdatePet {
+  id: Int!
+  nombre: String!
+  raza: String!
+  edad: Int!
+  peso: Float!
+  cedulaCliente: String!
+}
+# END PETS 
+
+# START MEDICINES
+type Medicine {
+  nombre: String!
+  descripcion: String!
+  dosis: String!
+}
+
+input NewMedicine {
+  nombre: String!
+  descripcion: String!
+  dosis: String!
+}
+
+input UpdateMedicine {
+  id: Int!
+  nombre: String!
+  descripcion: String!
+  dosis: String!
+}
+# END MEDICINES 
+
+# START RECIPES
+type Recipe {
+  idMedicamento: Int!
+  idMascota: Int!
+}
+
+input NewRecipe {
+  idMedicamento: Int!
+  idMascota: Int!
+}
+# END RECIPES 
+
+# START REPORTS
+type PetReportClient {
+  nombre_mascota: String!
+  dosis_receta: String!
+  descripcion_receta: String!
+}
+
+type GeneralClientReport {
+  mascotas: [PetReportClient]!
+  cedula_cliente: String!
+  nombres_cliente: String!
+  apellidos_cliente: String!
+}
+
+type RecipePetReport {
+  medicamento: String!
+  dosis_receta: String!
+  descripcion_receta: String!
+}
+
+type PetReport {
+  recetas: [RecipePetReport!]!
+  edad_mascota: String!
+  peso_mascota: String!
+  raza_mascota: String!
+  nombre_mascota: String!
+}
+# END REPORTS
+
+type Query {
+  clients: [Client!]!
+  pets: [Pet!]!
+  medicines: [Medicine!]!
+}
+
+type Mutation {
+  createClient(input: NewClient): Client!
+  updateClient(input: NewClient): Client!
+  deleteClient(cedula: String!): String!
+
+  createPet(input: NewPet): Pet!
+  updatePet(input: UpdatePet): Pet!
+  deletePet(id: Int!): Int!
+
+  createMedicine(input: NewMedicine): Medicine!
+  updateMedicine(input: UpdateMedicine): Medicine!
+  deleteMedicine(id: Int!): Int!
+
+  createRecipe(input: NewRecipe): Recipe!
+  deleteRecipe(id: Int!): Int!
+
+  generalClientReport(cedula: String!): [GeneralClientReport]!
+  recipesPetReport(idMascota: Int!): [PetReport]!
+}
