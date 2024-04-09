@@ -1,41 +1,26 @@
 package settings
 
 import (
-	"fmt"
-	"os"
+	_ "embed"
+	"log"
 
 	"gopkg.in/yaml.v2"
 )
 
-var (
-	errReadYaml = "error leyendo el archivo yaml"
-)
+//go:embed settings.yaml
+var settingsFile []byte
 
 type MySettings struct {
-	MySQL mySQL `yaml:"mysql"`
+	Mysql    mysqlFields    `yaml:"mysql"`
+	Handlers handlersFields `yaml:"handlers"`
 }
 
-func New() (*MySettings, error) {
+func ReadYaml() *MySettings {
 	var s MySettings
-
-	y, err := readYaml()
+	err := yaml.Unmarshal(settingsFile, &s)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
-	err = yaml.Unmarshal(y, &s)
-	if err != nil {
-		return nil, err
-	}
-
-	return &s, nil
-}
-
-func readYaml() ([]byte, error) {
-	content, err := os.ReadFile("settings.yaml")
-	if err != nil {
-		return nil, fmt.Errorf("%s:%s", errReadYaml, err)
-	}
-
-	return content, nil
+	return &s
 }

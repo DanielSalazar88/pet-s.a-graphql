@@ -1,8 +1,0 @@
-mysql:
-  username: root
-  password: rootroot
-  address: localhost
-  port: 3306
-  database: pet-sa
-handlers:
-  port: 3030
