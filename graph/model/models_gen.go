@@ -22,6 +22,7 @@ type Medicine struct {
 	Nombre      string `json:"nombre"`
 	Descripcion string `json:"descripcion"`
 	Dosis       string `json:"dosis"`
+	ID          int    `json:"id"`
 }
 
 type Mutation struct {
@@ -56,11 +57,16 @@ type NewRecipe struct {
 }
 
 type Pet struct {
-	Nombre        string  `json:"nombre"`
-	Raza          string  `json:"raza"`
-	Edad          int     `json:"edad"`
-	Peso          float64 `json:"peso"`
-	CedulaCliente string  `json:"cedulaCliente"`
+	Nombre           string  `json:"nombre"`
+	Raza             string  `json:"raza"`
+	Edad             int     `json:"edad"`
+	Peso             float64 `json:"peso"`
+	CedulaCliente    string  `json:"cedula_cliente"`
+	NombreCliente    string  `json:"nombre_cliente"`
+	ApellidosCliente string  `json:"apellidos_cliente"`
+	DireccionCliente string  `json:"direccion_cliente"`
+	TelefonoCliente  string  `json:"telefono_cliente"`
+	CorreoCliente    string  `json:"correo_cliente"`
 }
 
 type PetReport struct {
@@ -81,8 +87,12 @@ type Query struct {
 }
 
 type Recipe struct {
-	IDMedicamento int `json:"idMedicamento"`
-	IDMascota     int `json:"idMascota"`
+	ID            int    `json:"id"`
+	Medicamento   string `json:"medicamento"`
+	Dosis         string `json:"dosis"`
+	Descripcion   string `json:"descripcion"`
+	NombreMascota string `json:"nombre_mascota"`
+	CedulaCliente string `json:"cedula_cliente"`
 }
 
 type RecipePetReport struct {

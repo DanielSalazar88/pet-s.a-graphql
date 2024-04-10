@@ -23,10 +23,7 @@ func (s *MyService) InsertRecipe(recipe model.NewRecipe) (*model.Recipe, error) 
 	log.Println("RECETA INSERTADA")
 	fmt.Println("###############################")
 
-	return &model.Recipe{
-		IDMedicamento: recipe.IDMedicamento,
-		IDMascota:     recipe.IDMascota,
-	}, nil
+	return &model.Recipe{}, nil
 }
 
 func (s *MyService) DeleteRecipe(recipe int) (int, error) {

@@ -24,7 +24,12 @@ type Pet {
   raza: String!
   edad: Int!
   peso: Float!
-  cedulaCliente: String!
+  cedula_cliente: String!
+  nombre_cliente: String!
+  apellidos_cliente: String!
+  direccion_cliente: String!
+  telefono_cliente: String!
+  correo_cliente: String!
 }
 
 input NewPet {
@@ -50,6 +55,7 @@ type Medicine {
   nombre: String!
   descripcion: String!
   dosis: String!
+  id: Int!
 }
 
 input NewMedicine {
@@ -68,8 +74,12 @@ input UpdateMedicine {
 
 # START RECIPES
 type Recipe {
-  idMedicamento: Int!
-  idMascota: Int!
+  id: Int!
+  medicamento: String!
+  dosis: String!
+  descripcion: String!
+  nombre_mascota: String!
+  cedula_cliente: String!
 }
 
 input NewRecipe {
@@ -111,6 +121,7 @@ type Query {
   clients: [Client!]!
   pets: [Pet!]!
   medicines: [Medicine!]!
+  recipe: [Recipe]!
 }
 
 type Mutation {

@@ -66,6 +66,7 @@ type ComplexityRoot struct {
 	Medicine struct {
 		Descripcion func(childComplexity int) int
 		Dosis       func(childComplexity int) int
+		ID          func(childComplexity int) int
 		Nombre      func(childComplexity int) int
 	}
 
@@ -86,11 +87,16 @@ type ComplexityRoot struct {
 	}
 
 	Pet struct {
-		CedulaCliente func(childComplexity int) int
-		Edad          func(childComplexity int) int
-		Nombre        func(childComplexity int) int
-		Peso          func(childComplexity int) int
-		Raza          func(childComplexity int) int
+		ApellidosCliente func(childComplexity int) int
+		CedulaCliente    func(childComplexity int) int
+		CorreoCliente    func(childComplexity int) int
+		DireccionCliente func(childComplexity int) int
+		Edad             func(childComplexity int) int
+		Nombre           func(childComplexity int) int
+		NombreCliente    func(childComplexity int) int
+		Peso             func(childComplexity int) int
+		Raza             func(childComplexity int) int
+		TelefonoCliente  func(childComplexity int) int
 	}
 
 	PetReport struct {
@@ -111,11 +117,16 @@ type ComplexityRoot struct {
 		Clients   func(childComplexity int) int
 		Medicines func(childComplexity int) int
 		Pets      func(childComplexity int) int
+		Recipe    func(childComplexity int) int
 	}
 
 	Recipe struct {
-		IDMascota     func(childComplexity int) int
-		IDMedicamento func(childComplexity int) int
+		CedulaCliente func(childComplexity int) int
+		Descripcion   func(childComplexity int) int
+		Dosis         func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Medicamento   func(childComplexity int) int
+		NombreMascota func(childComplexity int) int
 	}
 
 	RecipePetReport struct {
@@ -144,6 +155,7 @@ type QueryResolver interface {
 	Clients(ctx context.Context) ([]*model.Client, error)
 	Pets(ctx context.Context) ([]*model.Pet, error)
 	Medicines(ctx context.Context) ([]*model.Medicine, error)
+	Recipe(ctx context.Context) ([]*model.Recipe, error)
 }
 
 type executableSchema struct {
@@ -248,6 +260,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Medicine.Dosis(childComplexity), true
+
+	case "Medicine.id":
+		if e.complexity.Medicine.ID == nil {
+			break
+		}
+
+		return e.complexity.Medicine.ID(childComplexity), true
 
 	case "Medicine.nombre":
 		if e.complexity.Medicine.Nombre == nil {
@@ -412,12 +431,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdatePet(childComplexity, args["input"].(*model.UpdatePet)), true
 
-	case "Pet.cedulaCliente":
+	case "Pet.apellidos_cliente":
+		if e.complexity.Pet.ApellidosCliente == nil {
+			break
+		}
+
+		return e.complexity.Pet.ApellidosCliente(childComplexity), true
+
+	case "Pet.cedula_cliente":
 		if e.complexity.Pet.CedulaCliente == nil {
 			break
 		}
 
 		return e.complexity.Pet.CedulaCliente(childComplexity), true
+
+	case "Pet.correo_cliente":
+		if e.complexity.Pet.CorreoCliente == nil {
+			break
+		}
+
+		return e.complexity.Pet.CorreoCliente(childComplexity), true
+
+	case "Pet.direccion_cliente":
+		if e.complexity.Pet.DireccionCliente == nil {
+			break
+		}
+
+		return e.complexity.Pet.DireccionCliente(childComplexity), true
 
 	case "Pet.edad":
 		if e.complexity.Pet.Edad == nil {
@@ -433,6 +473,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Pet.Nombre(childComplexity), true
 
+	case "Pet.nombre_cliente":
+		if e.complexity.Pet.NombreCliente == nil {
+			break
+		}
+
+		return e.complexity.Pet.NombreCliente(childComplexity), true
+
 	case "Pet.peso":
 		if e.complexity.Pet.Peso == nil {
 			break
@@ -446,6 +493,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Pet.Raza(childComplexity), true
+
+	case "Pet.telefono_cliente":
+		if e.complexity.Pet.TelefonoCliente == nil {
+			break
+		}
+
+		return e.complexity.Pet.TelefonoCliente(childComplexity), true
 
 	case "PetReport.edad_mascota":
 		if e.complexity.PetReport.EdadMascota == nil {
@@ -524,19 +578,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Pets(childComplexity), true
 
-	case "Recipe.idMascota":
-		if e.complexity.Recipe.IDMascota == nil {
+	case "Query.recipe":
+		if e.complexity.Query.Recipe == nil {
 			break
 		}
 
-		return e.complexity.Recipe.IDMascota(childComplexity), true
+		return e.complexity.Query.Recipe(childComplexity), true
 
-	case "Recipe.idMedicamento":
-		if e.complexity.Recipe.IDMedicamento == nil {
+	case "Recipe.cedula_cliente":
+		if e.complexity.Recipe.CedulaCliente == nil {
 			break
 		}
 
-		return e.complexity.Recipe.IDMedicamento(childComplexity), true
+		return e.complexity.Recipe.CedulaCliente(childComplexity), true
+
+	case "Recipe.descripcion":
+		if e.complexity.Recipe.Descripcion == nil {
+			break
+		}
+
+		return e.complexity.Recipe.Descripcion(childComplexity), true
+
+	case "Recipe.dosis":
+		if e.complexity.Recipe.Dosis == nil {
+			break
+		}
+
+		return e.complexity.Recipe.Dosis(childComplexity), true
+
+	case "Recipe.id":
+		if e.complexity.Recipe.ID == nil {
+			break
+		}
+
+		return e.complexity.Recipe.ID(childComplexity), true
+
+	case "Recipe.medicamento":
+		if e.complexity.Recipe.Medicamento == nil {
+			break
+		}
+
+		return e.complexity.Recipe.Medicamento(childComplexity), true
+
+	case "Recipe.nombre_mascota":
+		if e.complexity.Recipe.NombreMascota == nil {
+			break
+		}
+
+		return e.complexity.Recipe.NombreMascota(childComplexity), true
 
 	case "RecipePetReport.descripcion_receta":
 		if e.complexity.RecipePetReport.DescripcionReceta == nil {
@@ -1517,6 +1606,50 @@ func (ec *executionContext) fieldContext_Medicine_dosis(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Medicine_id(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medicine_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medicine",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createClient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createClient(ctx, field)
 	if err != nil {
@@ -1757,8 +1890,18 @@ func (ec *executionContext) fieldContext_Mutation_createPet(ctx context.Context,
 				return ec.fieldContext_Pet_edad(ctx, field)
 			case "peso":
 				return ec.fieldContext_Pet_peso(ctx, field)
-			case "cedulaCliente":
-				return ec.fieldContext_Pet_cedulaCliente(ctx, field)
+			case "cedula_cliente":
+				return ec.fieldContext_Pet_cedula_cliente(ctx, field)
+			case "nombre_cliente":
+				return ec.fieldContext_Pet_nombre_cliente(ctx, field)
+			case "apellidos_cliente":
+				return ec.fieldContext_Pet_apellidos_cliente(ctx, field)
+			case "direccion_cliente":
+				return ec.fieldContext_Pet_direccion_cliente(ctx, field)
+			case "telefono_cliente":
+				return ec.fieldContext_Pet_telefono_cliente(ctx, field)
+			case "correo_cliente":
+				return ec.fieldContext_Pet_correo_cliente(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Pet", field.Name)
 		},
@@ -1824,8 +1967,18 @@ func (ec *executionContext) fieldContext_Mutation_updatePet(ctx context.Context,
 				return ec.fieldContext_Pet_edad(ctx, field)
 			case "peso":
 				return ec.fieldContext_Pet_peso(ctx, field)
-			case "cedulaCliente":
-				return ec.fieldContext_Pet_cedulaCliente(ctx, field)
+			case "cedula_cliente":
+				return ec.fieldContext_Pet_cedula_cliente(ctx, field)
+			case "nombre_cliente":
+				return ec.fieldContext_Pet_nombre_cliente(ctx, field)
+			case "apellidos_cliente":
+				return ec.fieldContext_Pet_apellidos_cliente(ctx, field)
+			case "direccion_cliente":
+				return ec.fieldContext_Pet_direccion_cliente(ctx, field)
+			case "telefono_cliente":
+				return ec.fieldContext_Pet_telefono_cliente(ctx, field)
+			case "correo_cliente":
+				return ec.fieldContext_Pet_correo_cliente(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Pet", field.Name)
 		},
@@ -1944,6 +2097,8 @@ func (ec *executionContext) fieldContext_Mutation_createMedicine(ctx context.Con
 				return ec.fieldContext_Medicine_descripcion(ctx, field)
 			case "dosis":
 				return ec.fieldContext_Medicine_dosis(ctx, field)
+			case "id":
+				return ec.fieldContext_Medicine_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
@@ -2007,6 +2162,8 @@ func (ec *executionContext) fieldContext_Mutation_updateMedicine(ctx context.Con
 				return ec.fieldContext_Medicine_descripcion(ctx, field)
 			case "dosis":
 				return ec.fieldContext_Medicine_dosis(ctx, field)
+			case "id":
+				return ec.fieldContext_Medicine_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
@@ -2119,10 +2276,18 @@ func (ec *executionContext) fieldContext_Mutation_createRecipe(ctx context.Conte
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "idMedicamento":
-				return ec.fieldContext_Recipe_idMedicamento(ctx, field)
-			case "idMascota":
-				return ec.fieldContext_Recipe_idMascota(ctx, field)
+			case "id":
+				return ec.fieldContext_Recipe_id(ctx, field)
+			case "medicamento":
+				return ec.fieldContext_Recipe_medicamento(ctx, field)
+			case "dosis":
+				return ec.fieldContext_Recipe_dosis(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_Recipe_descripcion(ctx, field)
+			case "nombre_mascota":
+				return ec.fieldContext_Recipe_nombre_mascota(ctx, field)
+			case "cedula_cliente":
+				return ec.fieldContext_Recipe_cedula_cliente(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Recipe", field.Name)
 		},
@@ -2504,8 +2669,8 @@ func (ec *executionContext) fieldContext_Pet_peso(ctx context.Context, field gra
 	return fc, nil
 }
 
-func (ec *executionContext) _Pet_cedulaCliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Pet_cedulaCliente(ctx, field)
+func (ec *executionContext) _Pet_cedula_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_cedula_cliente(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2535,7 +2700,227 @@ func (ec *executionContext) _Pet_cedulaCliente(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Pet_cedulaCliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Pet_cedula_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Pet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Pet_nombre_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_nombre_cliente(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NombreCliente, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Pet_nombre_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Pet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Pet_apellidos_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_apellidos_cliente(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ApellidosCliente, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Pet_apellidos_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Pet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Pet_direccion_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_direccion_cliente(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DireccionCliente, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Pet_direccion_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Pet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Pet_telefono_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_telefono_cliente(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TelefonoCliente, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Pet_telefono_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Pet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Pet_correo_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_correo_cliente(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CorreoCliente, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Pet_correo_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Pet",
 		Field:      field,
@@ -3013,8 +3398,18 @@ func (ec *executionContext) fieldContext_Query_pets(ctx context.Context, field g
 				return ec.fieldContext_Pet_edad(ctx, field)
 			case "peso":
 				return ec.fieldContext_Pet_peso(ctx, field)
-			case "cedulaCliente":
-				return ec.fieldContext_Pet_cedulaCliente(ctx, field)
+			case "cedula_cliente":
+				return ec.fieldContext_Pet_cedula_cliente(ctx, field)
+			case "nombre_cliente":
+				return ec.fieldContext_Pet_nombre_cliente(ctx, field)
+			case "apellidos_cliente":
+				return ec.fieldContext_Pet_apellidos_cliente(ctx, field)
+			case "direccion_cliente":
+				return ec.fieldContext_Pet_direccion_cliente(ctx, field)
+			case "telefono_cliente":
+				return ec.fieldContext_Pet_telefono_cliente(ctx, field)
+			case "correo_cliente":
+				return ec.fieldContext_Pet_correo_cliente(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Pet", field.Name)
 		},
@@ -3067,8 +3462,68 @@ func (ec *executionContext) fieldContext_Query_medicines(ctx context.Context, fi
 				return ec.fieldContext_Medicine_descripcion(ctx, field)
 			case "dosis":
 				return ec.fieldContext_Medicine_dosis(ctx, field)
+			case "id":
+				return ec.fieldContext_Medicine_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_recipe(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_recipe(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Recipe(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Recipe)
+	fc.Result = res
+	return ec.marshalNRecipe2ᚕᚖpetᚑsᚗaᚑgraphqlᚋgraphᚋmodelᚐRecipe(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_recipe(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Recipe_id(ctx, field)
+			case "medicamento":
+				return ec.fieldContext_Recipe_medicamento(ctx, field)
+			case "dosis":
+				return ec.fieldContext_Recipe_dosis(ctx, field)
+			case "descripcion":
+				return ec.fieldContext_Recipe_descripcion(ctx, field)
+			case "nombre_mascota":
+				return ec.fieldContext_Recipe_nombre_mascota(ctx, field)
+			case "cedula_cliente":
+				return ec.fieldContext_Recipe_cedula_cliente(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Recipe", field.Name)
 		},
 	}
 	return fc, nil
@@ -3203,8 +3658,8 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Recipe_idMedicamento(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Recipe_idMedicamento(ctx, field)
+func (ec *executionContext) _Recipe_id(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3217,7 +3672,7 @@ func (ec *executionContext) _Recipe_idMedicamento(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.IDMedicamento, nil
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3234,7 +3689,7 @@ func (ec *executionContext) _Recipe_idMedicamento(ctx context.Context, field gra
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Recipe_idMedicamento(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Recipe_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Recipe",
 		Field:      field,
@@ -3247,8 +3702,8 @@ func (ec *executionContext) fieldContext_Recipe_idMedicamento(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Recipe_idMascota(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Recipe_idMascota(ctx, field)
+func (ec *executionContext) _Recipe_medicamento(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_medicamento(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3261,7 +3716,7 @@ func (ec *executionContext) _Recipe_idMascota(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.IDMascota, nil
+		return obj.Medicamento, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3273,19 +3728,195 @@ func (ec *executionContext) _Recipe_idMascota(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Recipe_idMascota(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Recipe_medicamento(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Recipe",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Recipe_dosis(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_dosis(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Dosis, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Recipe_dosis(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Recipe",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Recipe_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_descripcion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descripcion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Recipe_descripcion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Recipe",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Recipe_nombre_mascota(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_nombre_mascota(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NombreMascota, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Recipe_nombre_mascota(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Recipe",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Recipe_cedula_cliente(ctx context.Context, field graphql.CollectedField, obj *model.Recipe) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Recipe_cedula_cliente(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CedulaCliente, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Recipe_cedula_cliente(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Recipe",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5650,6 +6281,11 @@ func (ec *executionContext) _Medicine(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "id":
+			out.Values[i] = ec._Medicine_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5837,8 +6473,33 @@ func (ec *executionContext) _Pet(ctx context.Context, sel ast.SelectionSet, obj 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "cedulaCliente":
-			out.Values[i] = ec._Pet_cedulaCliente(ctx, field, obj)
+		case "cedula_cliente":
+			out.Values[i] = ec._Pet_cedula_cliente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "nombre_cliente":
+			out.Values[i] = ec._Pet_nombre_cliente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "apellidos_cliente":
+			out.Values[i] = ec._Pet_apellidos_cliente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "direccion_cliente":
+			out.Values[i] = ec._Pet_direccion_cliente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "telefono_cliente":
+			out.Values[i] = ec._Pet_telefono_cliente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "correo_cliente":
+			out.Values[i] = ec._Pet_correo_cliente(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6058,6 +6719,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "recipe":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_recipe(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -6100,13 +6783,33 @@ func (ec *executionContext) _Recipe(ctx context.Context, sel ast.SelectionSet, o
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Recipe")
-		case "idMedicamento":
-			out.Values[i] = ec._Recipe_idMedicamento(ctx, field, obj)
+		case "id":
+			out.Values[i] = ec._Recipe_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "idMascota":
-			out.Values[i] = ec._Recipe_idMascota(ctx, field, obj)
+		case "medicamento":
+			out.Values[i] = ec._Recipe_medicamento(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "dosis":
+			out.Values[i] = ec._Recipe_dosis(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "descripcion":
+			out.Values[i] = ec._Recipe_descripcion(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "nombre_mascota":
+			out.Values[i] = ec._Recipe_nombre_mascota(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cedula_cliente":
+			out.Values[i] = ec._Recipe_cedula_cliente(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6845,6 +7548,44 @@ func (ec *executionContext) marshalNRecipe2petᚑsᚗaᚑgraphqlᚋgraphᚋmodel
 	return ec._Recipe(ctx, sel, &v)
 }
 
+func (ec *executionContext) marshalNRecipe2ᚕᚖpetᚑsᚗaᚑgraphqlᚋgraphᚋmodelᚐRecipe(ctx context.Context, sel ast.SelectionSet, v []*model.Recipe) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalORecipe2ᚖpetᚑsᚗaᚑgraphqlᚋgraphᚋmodelᚐRecipe(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) marshalNRecipe2ᚖpetᚑsᚗaᚑgraphqlᚋgraphᚋmodelᚐRecipe(ctx context.Context, sel ast.SelectionSet, v *model.Recipe) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -7254,6 +7995,13 @@ func (ec *executionContext) marshalOPetReportClient2ᚖpetᚑsᚗaᚑgraphqlᚋg
 		return graphql.Null
 	}
 	return ec._PetReportClient(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalORecipe2ᚖpetᚑsᚗaᚑgraphqlᚋgraphᚋmodelᚐRecipe(ctx context.Context, sel ast.SelectionSet, v *model.Recipe) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Recipe(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

@@ -90,6 +90,11 @@ func (r *queryResolver) Medicines(ctx context.Context) ([]*model.Medicine, error
 	return serv.GetMedicines()
 }
 
+// Recipe is the resolver for the recipe field.
+func (r *queryResolver) Recipe(ctx context.Context) ([]*model.Recipe, error) {
+	return serv.GetRecipes()
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
