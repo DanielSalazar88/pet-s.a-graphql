@@ -61,6 +61,7 @@ type Pet struct {
 	Raza             string  `json:"raza"`
 	Edad             int     `json:"edad"`
 	Peso             float64 `json:"peso"`
+	ID               int     `json:"id"`
 	CedulaCliente    string  `json:"cedula_cliente"`
 	NombreCliente    string  `json:"nombre_cliente"`
 	ApellidosCliente string  `json:"apellidos_cliente"`

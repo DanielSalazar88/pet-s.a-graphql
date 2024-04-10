@@ -92,6 +92,7 @@ type ComplexityRoot struct {
 		CorreoCliente    func(childComplexity int) int
 		DireccionCliente func(childComplexity int) int
 		Edad             func(childComplexity int) int
+		ID               func(childComplexity int) int
 		Nombre           func(childComplexity int) int
 		NombreCliente    func(childComplexity int) int
 		Peso             func(childComplexity int) int
@@ -465,6 +466,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Pet.Edad(childComplexity), true
+
+	case "Pet.id":
+		if e.complexity.Pet.ID == nil {
+			break
+		}
+
+		return e.complexity.Pet.ID(childComplexity), true
 
 	case "Pet.nombre":
 		if e.complexity.Pet.Nombre == nil {
@@ -1890,6 +1898,8 @@ func (ec *executionContext) fieldContext_Mutation_createPet(ctx context.Context,
 				return ec.fieldContext_Pet_edad(ctx, field)
 			case "peso":
 				return ec.fieldContext_Pet_peso(ctx, field)
+			case "id":
+				return ec.fieldContext_Pet_id(ctx, field)
 			case "cedula_cliente":
 				return ec.fieldContext_Pet_cedula_cliente(ctx, field)
 			case "nombre_cliente":
@@ -1967,6 +1977,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePet(ctx context.Context,
 				return ec.fieldContext_Pet_edad(ctx, field)
 			case "peso":
 				return ec.fieldContext_Pet_peso(ctx, field)
+			case "id":
+				return ec.fieldContext_Pet_id(ctx, field)
 			case "cedula_cliente":
 				return ec.fieldContext_Pet_cedula_cliente(ctx, field)
 			case "nombre_cliente":
@@ -2664,6 +2676,50 @@ func (ec *executionContext) fieldContext_Pet_peso(ctx context.Context, field gra
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Pet_id(ctx context.Context, field graphql.CollectedField, obj *model.Pet) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Pet_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Pet_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Pet",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3398,6 +3454,8 @@ func (ec *executionContext) fieldContext_Query_pets(ctx context.Context, field g
 				return ec.fieldContext_Pet_edad(ctx, field)
 			case "peso":
 				return ec.fieldContext_Pet_peso(ctx, field)
+			case "id":
+				return ec.fieldContext_Pet_id(ctx, field)
 			case "cedula_cliente":
 				return ec.fieldContext_Pet_cedula_cliente(ctx, field)
 			case "nombre_cliente":
@@ -6470,6 +6528,11 @@ func (ec *executionContext) _Pet(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "peso":
 			out.Values[i] = ec._Pet_peso(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "id":
+			out.Values[i] = ec._Pet_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

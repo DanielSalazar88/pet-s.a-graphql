@@ -24,6 +24,7 @@ type Pet {
   raza: String!
   edad: Int!
   peso: Float!
+  id: Int!
   cedula_cliente: String!
   nombre_cliente: String!
   apellidos_cliente: String!
